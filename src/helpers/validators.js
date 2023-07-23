@@ -20,6 +20,7 @@ import {
   equals,
   identity,
   prop,
+  propEq,
   values,
 } from 'ramda';
 
@@ -30,10 +31,15 @@ const isGreen = equals('green');
 const isWhite = equals('white');
 const isBlue = equals('blue');
 const isOrange = equals('orange');
+const getTriangle = prop('triangle');
 const getGreen = prop('green');
-
+const twoGreens = propEq('green', 2);
+const oneRed = propEq('red', 1);
+const isGreenTriangle = compose(isGreen, getTriangle);
 const countColors = compose(countBy(identity), values);
 const countGreenColors = compose(getGreen, countColors);
+const twoGreenColors = compose(twoGreens, countColors);
+const oneRedColor = compose(oneRed, countColors);
 const redAndBlue = ({ blue, red }) => blue === red;
 const moreThree = ({ red, green, blue, orange }) =>
   red > 2 || green > 2 || blue > 2 || orange > 2;
@@ -58,13 +64,17 @@ export const validateFieldN4 = ({ star, square, circle }) =>
 export const validateFieldN5 = compose(moreThree, countColors);
 
 // 6. Ровно две зеленые фигуры (одна из зелёных – это треугольник), плюс одна красная. Четвёртая оставшаяся любого доступного цвета, но не нарушающая первые два условия
-export const validateFieldN6 = () => false;
+export const validateFieldN6 = allPass([
+  isGreenTriangle,
+  twoGreenColors,
+  oneRedColor,
+]);
 
 // 7. Все фигуры оранжевые.
 export const validateFieldN7 = compose(allOrange, countColors);
 
 // 8. Не красная и не белая звезда, остальные – любого цвета.
-export const validateFieldN8 = () => false;
+export const validateFieldN8 = ({ star }) => !isRed(star) && !isWhite(star);
 
 // 9. Все фигуры зеленые.
 export const validateFieldN9 = ({ star, square, triangle, circle }) =>
@@ -72,4 +82,5 @@ export const validateFieldN9 = ({ star, square, triangle, circle }) =>
 // allPass([isGreen(star), isGreen(square), isGreen(triangle), isGreen(circle)]);
 
 // 10. Треугольник и квадрат одного цвета (не белого), остальные – любого цвета
-export const validateFieldN10 = () => false;
+export const validateFieldN10 = ({ square, triangle }) =>
+  !isWhite(square) && square === triangle;
