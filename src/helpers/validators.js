@@ -44,6 +44,7 @@ const redAndBlue = ({ blue, red }) => blue === red;
 const moreThree = ({ red, green, blue, orange }) =>
   red > 2 || green > 2 || blue > 2 || orange > 2;
 const allOrange = ({ orange }) => orange === 4;
+const allGreen = ({ green }) => green === 4;
 
 // 1. Красная звезда, зеленый квадрат, все остальные белые.
 export const validateFieldN1 = ({ star, square, triangle, circle }) =>
@@ -77,8 +78,7 @@ export const validateFieldN7 = compose(allOrange, countColors);
 export const validateFieldN8 = ({ star }) => !isRed(star) && !isWhite(star);
 
 // 9. Все фигуры зеленые.
-export const validateFieldN9 = ({ star, square, triangle, circle }) =>
-  isGreen(star) && isGreen(square) && isGreen(triangle) && isGreen(circle);
+export const validateFieldN9 = compose(allGreen, countColors);
 // allPass([isGreen(star), isGreen(square), isGreen(triangle), isGreen(circle)]);
 
 // 10. Треугольник и квадрат одного цвета (не белого), остальные – любого цвета
